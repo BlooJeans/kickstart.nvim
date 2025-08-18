@@ -1,57 +1,5 @@
 --[[
-
-=====================================================================
-==================== READ THIS BEFORE CONTINUING ====================
-=====================================================================
-========                                    .-----.          ========
-========         .----------------------.   | === |          ========
-========         |.-""""""""""""""""""-.|   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||   KICKSTART.NVIM   ||   |-----|          ========
-========         ||                    ||   | === |          ========
-========         ||                    ||   |-----|          ========
-========         ||:Tutor              ||   |:::::|          ========
-========         |'-..................-'|   |____o|          ========
-========         `"")----------------(""`   ___________      ========
-========        /::::::::::|  |::::::::::\  \ no mouse \     ========
-========       /:::========|  |==hjkl==:::\  \ required \    ========
-========      '""""""""""""'  '""""""""""""'  '""""""""""'   ========
-========                                                     ========
-=====================================================================
-=====================================================================
-
-What is Kickstart?
-
-  Kickstart.nvim is *not* a distribution.
-
-  Kickstart.nvim is a starting point for your own configuration.
-    The goal is that you can read every line of code, top-to-bottom, understand
-    what your configuration is doing, and modify it to suit your needs.
-
-    Once you've done that, you can start exploring, configuring and tinkering to
-    make Neovim your own! That might mean leaving Kickstart just the way it is for a while
-    or immediately breaking it into modular pieces. It's up to you!
-
-    If you don't know anything about Lua, I recommend taking some time to read through
-    a guide. One possible example which will only take 10-15 minutes:
-      - https://learnxinyminutes.com/docs/lua/
-
-    After understanding a bit more about Lua, you can use `:help lua-guide` as a
-    reference for how Neovim integrates Lua.
-    - :help lua-guide
-    - (or HTML version): https://neovim.io/doc/user/lua-guide.html
-
 Kickstart Guide:
-
-  TODO: The very first thing you should do is to run the command `:Tutor` in Neovim.
-
-    If you don't know what this means, type the following:
-      - <escape key>
-      - :
-      - Tutor
-      - <enter key>
-
-    (If you already know the Neovim basics, you can skip this step.)
 
   Once you've completed that, you can continue working through **AND READING** the rest
   of the kickstart init.lua.
@@ -91,7 +39,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.o`
@@ -100,9 +48,7 @@ vim.g.have_nerd_font = false
 
 -- Make line numbers default
 vim.o.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
--- vim.o.relativenumber = true
+vim.o.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.o.mouse = 'a'
@@ -141,6 +87,11 @@ vim.o.timeoutlen = 300
 vim.o.splitright = true
 vim.o.splitbelow = true
 
+vim.o.expandtab = true
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+vim.o.wrap = false
+
 -- Sets how neovim will display certain whitespace characters in the editor.
 --  See `:help 'list'`
 --  and `:help 'listchars'`
@@ -173,8 +124,9 @@ vim.o.confirm = true
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
--- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+-- vim.keymap.set('n', '<leader>e', vim.lsp.diagnostic.show_line_diagnostics)
+vim.keymap.set('n', '<leader>k', vim.lsp.buf.signature_help)
 
 -- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
 -- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
@@ -182,7 +134,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 --
 -- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
 -- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+--vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
@@ -198,6 +150,96 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- don't lose visual selection when doing indents
+vim.keymap.set('n', '<', '<gv', { noremap = true })
+vim.keymap.set('n', '>', '>gv', { noremap = true })
+
+-- Split line (sister to [J]oin lines)
+-- The normal use of S is covered by cc, so don't worry about shadowing it.
+vim.keymap.set('n', 'S', 'i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w')
+
+-- Source
+vim.keymap.set('v', '<leader>S', 'y:@"<CR>')
+vim.keymap.set('n', '<leader>S', '^vg_y:execute @@<cr>:echo "Sourced line."<cr>')
+
+-- Black hole delete
+vim.keymap.set('n', '<Backspace>', '"_d')
+vim.keymap.set('v', '<Backspace>', '"_d')
+
+-- Vimrc
+vim.keymap.set('n', '<leader>rc', ':tabe ~/.config/nvim/init.lua<cr>')
+vim.keymap.set('n', '<leader>so', ':source $MYVIMRC<cr>')
+
+-- Heresy
+vim.keymap.set('i', '<c-a>', '<esc>I')
+vim.keymap.set('i', '<c-e>', '<esc>A')
+vim.keymap.set('c', '<c-a>', '<home>')
+vim.keymap.set('c', '<c-a>', '<end>')
+
+-- currently disabled, because I have both <A-,> + <A-.> and <A-h> + <A-l> to switch between buffers. If I used hljk for resizing then I could use these
+-- " Alt key window resizing {{{
+-- " " Maps Alt-[h,j,k,l] to resizing a window split
+-- map <silent> <A-h> <C-w><
+-- map <silent> <A-j> <C-W>-
+-- map <silent> <A-k> <C-W>+
+-- map <silent> <A-l> <C-w>>
+--
+-- " Maps Alt-[s.v] to horizontal and vertical split respectively
+-- map <silent> <A-s> :split<CR>
+-- map <silent> <A-v> :vsplit<CR>
+--
+-- " Maps Alt-[n,p] for moving next and previous window respectively
+-- map <silent> <A-n> <C-w><C-w>
+-- map <silent> <A-p> <C-w><S-w>
+--
+-- " }}}
+
+-- let g:interestingWordsGUIColors = ['#A4E57E', '#FF7272', '#FFB3FF', '#9999FF']
+-- vim.keymap.set('n', '<leader>k', ':call InterestingWords("n")<cr>', {silent = true})
+-- vim.keymap.set('n', '<leader>K',  ':call UncolorAllWords()<cr>', {silent = true})
+
+-- Barbar {{{
+-- Magic buffer-picking mode
+vim.keymap.set('n', '<C-s>', ':BufferPick<CR>', { silent = true })
+
+-- Sort automatically by...
+vim.keymap.set('n', '<leader>bd', ':BufferOrderByDirectory<CR>', { silent = true })
+vim.keymap.set('n', '<leader>bl', ':BufferOrderByLanguage<CR>', { silent = true })
+
+-- Switch to previous/next tab
+vim.keymap.set('n', '<A-h>', ':BufferPrev<CR>', { desc = 'Move focus to previous buffer', silent = true })
+vim.keymap.set('n', '<A-l>', ':BufferNext<CR>', { desc = 'Move focus to next buffer', silent = true })
+vim.keymap.set('n', '<A-,>', ':BufferPrev<CR>', { desc = 'Move focus to previous buffer', silent = true })
+vim.keymap.set('n', '<A-.>', ':BufferNext<CR>', { desc = 'Move focus to next buffer', silent = true })
+
+-- Move current tab to left/right
+vim.keymap.set('n', '<A-H>', ':BufferMovePrevious<CR>', { desc = 'Move buffer to the left', silent = true })
+vim.keymap.set('n', '<A-L>', ':BufferMoveNext<CR>', { desc = 'Move buffer to the right', silent = true })
+vim.keymap.set('n', '<A-<>', ':BufferMovePrevious<CR>', { desc = 'Move buffer to the left', silent = true })
+vim.keymap.set('n', '<A->>', ':BufferMoveNext<CR>', { desc = 'Move buffer to the right', silent = true })
+
+-- Goto buffer in position...
+vim.keymap.set('n', '<A-1>', ':BufferGoto 1<CR>', { silent = true })
+vim.keymap.set('n', '<A-2>', ':BufferGoto 2<CR>', { silent = true })
+vim.keymap.set('n', '<A-3>', ':BufferGoto 3<CR>', { silent = true })
+vim.keymap.set('n', '<A-4>', ':BufferGoto 4<CR>', { silent = true })
+vim.keymap.set('n', '<A-5>', ':BufferGoto 5<CR>', { silent = true })
+vim.keymap.set('n', '<A-6>', ':BufferGoto 6<CR>', { silent = true })
+vim.keymap.set('n', '<A-7>', ':BufferGoto 7<CR>', { silent = true })
+vim.keymap.set('n', '<A-8>', ':BufferGoto 8<CR>', { silent = true })
+vim.keymap.set('n', '<A-9>', ':BufferLast<CR>', { silent = true })
+
+-- Close buffer
+vim.keymap.set('n', '<A-c>', ':BufferClose<CR>', { silent = true })
+-- }}}
+
+-- Don't move on #, but future 'n' movements behave in the same direction as *
+-- I'd use a function for this but Vim clobbers the last search when you're in
+-- a function so fuck it, practicality beats purity.
+vim.keymap.set('n', '#', ':let stay_star_view = winsaveview()<cr>*:call winrestview(stay_star_view)<cr>', { desc = 'Dont move on # but load the star search' })
+
+vim.keymap.set('n', 'gv', '<Cmd>vs<CR><Cmd>lua vim.lsp.buf.definition()<CR>', { desc = 'Open symbol in a new vertical tab' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -673,16 +715,29 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        -- pyright = {},
-        -- rust_analyzer = {},
+        pyright = {},
+        rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
-        --
+        ts_ls = {},
+        jsonls = {},
+        html = {},
+        terraformls = {},
+        vimls = {},
+        tailwindcss = {},
+        vuels = {},
+        bashls = {},
+        cssls = {},
+        dockerls = {},
+        prettier = {},
+        docker_compose_language_service = {},
+        yamlls = {},
+        prismals = {},
+        graphql = {},
 
         lua_ls = {
           -- cmd = { ... },
@@ -876,13 +931,9 @@ require('lazy').setup({
     },
   },
 
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+  -- Themes
+  {
     'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('tokyonight').setup {
@@ -890,11 +941,30 @@ require('lazy').setup({
           comments = { italic = false }, -- Disable italics in comments
         },
       }
-
-      -- Load the colorscheme here.
-      -- Like many other themes, this one has different styles, and you could load
-      -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-      vim.cmd.colorscheme 'tokyonight-night'
+    end,
+  },
+  { 'sainnhe/sonokai' },
+  { 'sainnhe/edge' },
+  { 'romgrk/doom-one.vim' },
+  { -- You can easily change to a different colorscheme.
+    -- Change the name of the colorscheme plugin below, and then
+    -- change the command in the config to whatever the name of that colorscheme is.
+    --
+    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+    -- Included themes: nvcode (basically just dark+), onedark, nord, aurora (more colorful nord), gruvbox, palenight, snazzy (Based on hyper-snazzy by Sindre Sorhus)
+    'christianchiarulli/nvcode-color-schemes.vim',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    priority = 1000, -- Make sure to load this before all the other start plugins.
+    config = function()
+      -- vim.cmd.colorscheme 'onedark'
+      -- vim.cmd.colorscheme 'nvcode'
+    end,
+  },
+  {
+    'lunarvim/onedarker',
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme 'onedarker'
     end,
   },
 
@@ -944,7 +1014,20 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'typescript',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -974,17 +1057,13 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
-  -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
-  --    This is the easiest way to modularize your config.
-  --
-  --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
   --
   -- For additional information with loading, sourcing and examples see `:help lazy.nvim-🔌-plugin-spec`
   -- Or use telescope!
