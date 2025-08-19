@@ -3,7 +3,12 @@ return {
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help ibl`
+
+    -- For setting shiftwidth and tabstop automatically.
+    dependencies = 'tpope/vim-sleuth',
+
     main = 'ibl',
+    event = { 'BufReadPost', 'BufNewFile' },
     config = function()
       -- local highlight = {
       --   'RainbowRed',

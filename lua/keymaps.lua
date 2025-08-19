@@ -3,7 +3,7 @@
 
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>', { desc = 'Escape and clear hlsearch' })
 
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 -- vim.keymap.set('n', '<leader>e', vim.lsp.diagnostic.show_line_diagnostics)
@@ -42,7 +42,7 @@ vim.keymap.set('n', 'S', 'i<cr><esc>^mwgk:silent! s/\v +$//<cr>:noh<cr>`w')
 
 -- Source
 vim.keymap.set('v', '<leader>S', 'y:@"<CR>')
-vim.keymap.set('n', '<leader>S', '^vg_y:execute @@<cr>:echo "Sourced line."<cr>')
+vim.keymap.set('n', '<leader>S', "^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>")
 
 -- Black hole delete
 vim.keymap.set('n', '<Backspace>', '"_d')
@@ -128,8 +128,22 @@ vim.keymap.set('n', 'gv', '<Cmd>vs<CR><Cmd>lua vim.lsp.buf.definition()<CR>', { 
 -- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
 -- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
 
+-- Execute macro over visual region.
+vim.keymap.set('x', '@', function()
+  return ':norm @' .. vim.fn.getcharstr() .. '<cr>'
+end, { expr = true })
+
 -- Floating terminal.
 vim.keymap.set('n', '<M-t>', function()
   require('utils.float_term').float_term(nil, {})
 end, { desc = 'Open terminal' })
 vim.keymap.set('t', '<M-t>', '<cmd>close<cr>', { desc = 'Close terminal' })
+
+-- Open the package manager.
+vim.keymap.set('n', '<leader>L', '<cmd>Lazy<cr>', { desc = 'Lazy' })
+
+-- Make the leader a noop when not followed by something.
+vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>')
+
+-- Escape and save changes.
+vim.keymap.set({ 's', 'i', 'n', 'v' }, '<C-s>', '<esc>:w<cr>', { desc = 'Exit insert mode and save changes.' })
