@@ -46,15 +46,49 @@ return {
 
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
+      local telescope_custom_actions = {}
+      local actions = require 'telescope.actions'
+      local action_state = require 'telescope.actions.state'
+
+      function telescope_custom_actions._multiopen(prompt_bufnr, open_cmd)
+        local picker = action_state.get_current_picker(prompt_bufnr)
+        local selected_entry = action_state.get_selected_entry()
+        local num_selections = #picker:get_multi_selection()
+        if not num_selections or num_selections <= 1 then
+          actions.add_selection(prompt_bufnr)
+        end
+        actions.send_selected_to_qflist(prompt_bufnr)
+        vim.cmd('cfdo ' .. open_cmd)
+      end
+      function telescope_custom_actions.multi_selection_open_vsplit(prompt_bufnr)
+        telescope_custom_actions._multiopen(prompt_bufnr, 'vsplit')
+      end
+      function telescope_custom_actions.multi_selection_open_split(prompt_bufnr)
+        telescope_custom_actions._multiopen(prompt_bufnr, 'split')
+      end
+      function telescope_custom_actions.multi_selection_open_tab(prompt_bufnr)
+        telescope_custom_actions._multiopen(prompt_bufnr, 'tabe')
+      end
+      function telescope_custom_actions.multi_selection_open(prompt_bufnr)
+        telescope_custom_actions._multiopen(prompt_bufnr, 'edit')
+      end
+
       require('telescope').setup {
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          mappings = {
+            i = {
+              -- ['<c-enter>'] = 'to_fuzzy_refine',
+              ['<CR>'] = telescope_custom_actions.multi_selection_open,
+              ['<C-V>'] = telescope_custom_actions.multi_selection_open_vsplit,
+              ['<C-S>'] = telescope_custom_actions.multi_selection_open_split,
+              ['<C-T>'] = telescope_custom_actions.multi_selection_open_tab,
+            },
+            n = i,
+          },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
