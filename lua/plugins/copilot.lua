@@ -7,12 +7,14 @@ return {
     opts = {
       -- I don't find the panel useful.
       panel = { enabled = false },
+
       suggestion = {
+        enabled = false,
         auto_trigger = true,
         -- Use alt to interact with Copilot.
         keymap = {
-          -- Disable the built-in mapping, we'll configure it in nvim-cmp.
-          accept = false,
+          -- Disable the built-in mapping, we'll configure it in nvim-cmp / blink.
+          accept = '<M-tab>',
           accept_word = '<M-w>',
           accept_line = '<M-l>',
           next = '<M-]>',
@@ -20,7 +22,8 @@ return {
           dismiss = '/',
         },
       },
-      filetypes = { markdown = true },
+
+      filetypes = { markdown = true, help = true },
     },
     config = function(_, opts)
       local copilot = require 'copilot.suggestion'
