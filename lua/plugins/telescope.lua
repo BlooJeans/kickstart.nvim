@@ -78,6 +78,7 @@ return {
         --  All the info you're looking for is in `:help telescope.setup()`
         --
         defaults = {
+          sorting_strategy = 'ascending',
           mappings = {
             i = {
               -- ['<c-enter>'] = 'to_fuzzy_refine',
@@ -87,6 +88,15 @@ return {
               ['<C-T>'] = telescope_custom_actions.multi_selection_open_tab,
             },
             n = i,
+          },
+          layout_config = {
+            horizontal = {
+              prompt_position = 'top',
+              preview_width = 0.6,
+            },
+            vertical = {
+              preview_height = 0.5,
+            },
           },
         },
         -- pickers = {}

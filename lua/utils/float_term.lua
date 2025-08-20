@@ -12,8 +12,12 @@ function M.float_term(cmd, opts)
   else
     terminals[termkey] = require('lazy.util').float_term(cmd, {
       ft = 'lazyterm',
-      size = { width = opts.width or 0.7, height = opts.height or 0.7 },
+      size = {
+        width = opts.width or 0.7,
+        height = opts.height or 0.7,
+      },
       persistent = true,
+      border = 'rounded',
     })
     local buf = terminals[termkey].buf
     vim.b[buf].lazyterm_cmd = cmd
