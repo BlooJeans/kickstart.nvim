@@ -82,7 +82,7 @@ return {
           mappings = {
             i = {
               -- ['<c-enter>'] = 'to_fuzzy_refine',
-              ['<CR>'] = telescope_custom_actions.multi_selection_open,
+              -- ['<CR>'] = telescope_custom_actions.multi_selection_open,
               ['<C-V>'] = telescope_custom_actions.multi_selection_open_vsplit,
               ['<C-S>'] = telescope_custom_actions.multi_selection_open_split,
               ['<C-T>'] = telescope_custom_actions.multi_selection_open_tab,

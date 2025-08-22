@@ -4,7 +4,7 @@ local icons = require('utils.icons').diagnostics
 return {
   {
     'folke/trouble.nvim',
-    cmd = { 'Trouble', 'TroubleToggle' },
+    -- cmd = { 'Trouble', 'TroubleToggle' },
     dependencies = 'nvim-tree/nvim-web-devicons',
     opts = {
       signs = {

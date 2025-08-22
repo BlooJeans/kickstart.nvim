@@ -17,25 +17,110 @@ return {
 
   -- { 'JoosepAlviste/nvim-ts-context-commentstring', desc = 'Context aware commenting (e.g. JSX commenting vs javascript)' },
 
-  -- {
-  --   'onsails/lspkind.nvim',
-  --   opts = function(_, opts)
-  --     -- use codicons preset
-  --     opts.preset = 'codicons'
-  --     -- set some missing symbol types
-  --     opts.symbol_map = {
-  --       Array = '',
-  --       Boolean = '',
-  --       Key = '',
-  --       Namespace = '',
-  --       Null = '',
-  --       Number = '',
-  --       Object = '',
-  --       Package = '',
-  --       String = '',
-  --     }
-  --   end,
-  -- },
+  {
+    'onsails/lspkind.nvim',
+    opts = function(_, opts)
+      -- if you change or add symbol here
+      -- replace corresponding line in readme
+      -- default = {
+      --    Text = "󰉿",
+      --    Method = "󰆧",
+      --    Function = "󰊕",
+      --    Constructor = "",
+      --    Field = "󰜢",
+      --    Variable = "󰀫",
+      --    Class = "󰠱",
+      --    Interface = "",
+      --    Module = "",
+      --    Property = "󰜢",
+      --    Unit = "󰑭",
+      --    Value = "󰎠",
+      --    Enum = "",
+      --    Keyword = "󰌋",
+      --    Snippet = "",
+      --    Color = "󰏘",
+      --    File = "󰈙",
+      --    Reference = "󰈇",
+      --    Folder = "󰉋",
+      --    EnumMember = "",
+      --    Constant = "󰏿",
+      --    Struct = "󰙅",
+      --    Event = "",
+      --    Operator = "󰆕",
+      --    TypeParameter = "",
+      --  },
+      --  codicons = {
+      --    Text = "",
+      --    Method = "",
+      --    Function = "",
+      --    Constructor = "",
+      --    Field = "",
+      --    Variable = "",
+      --    Class = "",
+      --    Interface = "",
+      --    Module = "",
+      --    Property = "",
+      --    Unit = "",
+      --    Value = "",
+      --    Enum = "",
+      --    Keyword = "",
+      --    Snippet = "",
+      --    Color = "",
+      --    File = "",
+      --    Reference = "",
+      --    Folder = "",
+      --    EnumMember = "",
+      --    Constant = "",
+      --    Struct = "",
+      --    Event = "",
+      --    Operator = "",
+      --    TypeParameter = "",
+      --  },
+      -- use codicons preset
+      opts.preset = 'codicons'
+
+      opts.symbol_map = {
+        -- mix n matched between codicons and default
+        -- defaults
+        Text = '',
+        Method = '󰆧',
+        Function = '󰊕',
+        Constructor = '',
+        Field = '󰜢',
+        Variable = '󰀫',
+        Class = '󰠱',
+        Interface = '',
+        Module = '',
+        Property = '󰜢',
+        Unit = '󰑭',
+        Value = '󰎠',
+        Enum = '',
+        Keyword = '󰌋',
+        Snippet = '',
+        Color = '󰏘',
+        File = '󰈙',
+        Reference = '󰈇',
+        Folder = '󰉋',
+        EnumMember = '',
+        Constant = '󰏿',
+        Struct = '󰙅',
+        Event = '',
+        Operator = '󰆕',
+        kTypeParameter = '',
+
+        -- missing
+        Array = '',
+        Boolean = '',
+        Key = '',
+        Namespace = '',
+        Null = '',
+        Number = '',
+        Object = '',
+        Package = '',
+        String = '',
+      }
+    end,
+  },
 
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
